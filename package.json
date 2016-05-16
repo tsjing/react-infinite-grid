@@ -16,9 +16,9 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "lodash": "^3.10.1",
-    "react": "^0.14.2",
-    "react-dom": "^0.14.2"
+    "lodash": "^4.10.0",
+    "react": "^15.0.2",
+    "react-dom": "^15.0.2"
   },
   "devDependencies": {
     "babel": "^6.1.18",
