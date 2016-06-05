@@ -217,7 +217,7 @@ var InfiniteGrid = (function (_React$Component) {
 				});
 			}
 			// Update these all the time because entries may change on the fly.
-			// this._updateItemDimensions();
+			this._updateItemDimensions();
 			this._visibleIndexes();
 		}
 	}, {
