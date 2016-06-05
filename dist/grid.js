@@ -105,7 +105,8 @@ var InfiniteGrid = (function (_React$Component) {
 	}, {
 		key: '_getGridHeight',
 		value: function _getGridHeight() {
-			return Math.floor(this.props.entries.length / this.state.itemDimensions.itemsPerRow) * this.state.itemDimensions.height;
+      var gridRow = Math.floor(this.props.entries.length / this.state.itemDimensions.itemsPerRow)
+			return (gridRow > 2) ? gridRow  * this.state.itemDimensions.height : 3 * this.state.itemDimensions.height;
 		}
 	}, {
 		key: '_getWrapperRect',
