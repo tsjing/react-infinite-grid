@@ -14,7 +14,8 @@ export default class InfiniteGrid extends React.Component {
 			wrapperHeight: React.PropTypes.number,
 			lazyCallback: React.PropTypes.func,
 			renderRangeCallback: React.PropTypes.func,
-			buffer: React.PropTypes.number
+			buffer: React.PropTypes.number,
+			gridStyle: React.PropTypes.object
 		}
 	}
 
@@ -61,6 +62,8 @@ export default class InfiniteGrid extends React.Component {
 			marginTop: this.props.padding,
 			marginLeft: this.props.padding,
 			minHeight: this._getGridHeight(),
+			minWidth: '100%',
+			...this.props.gridStyle
 		};
 	}
 
@@ -248,5 +251,6 @@ InfiniteGrid.defaultProps = {
 	padding: 10,
 	entries: [],
 	height: 250,
-	width: 250
+	width: 250,
+	gridStyle: {}
 }
