@@ -52,7 +52,7 @@ export default class InfiniteGrid extends React.Component {
 			overflowY: 'scroll',
 			width: '100%',
 			height: this.props.wrapperHeight,
-			WebkitOverflowScrolling: true,
+			WebkitOverflowScrolling: 'touch',
 		};
 	}
 
