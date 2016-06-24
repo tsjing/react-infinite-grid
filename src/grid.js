@@ -69,9 +69,10 @@ export default class InfiniteGrid extends React.Component {
 	}
 
 	_getGridHeight() {
+    var gridRow = Math.floor(this.props.entries.length / this.state.itemDimensions.itemsPerRow)
 		return (this.props.entries.length < this.state.itemDimensions.itemsPerRow) ?
 			this.state.itemDimensions.height :
-			Math.floor(this.props.entries.length / this.state.itemDimensions.itemsPerRow) * this.state.itemDimensions.height;
+			(gridRow > 2) ? gridRow * this.state.itemDimensions.height : 3 * this.state.itemDimensions.height;
 	}
 
 	_getWrapperRect() {
@@ -169,7 +170,7 @@ export default class InfiniteGrid extends React.Component {
 			});
 		}
 		// Update these all the time because entries may change on the fly.
-		// this._updateItemDimensions();
+		this._updateItemDimensions();
 		this._visibleIndexes();
 	}
 
