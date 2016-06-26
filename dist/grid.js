@@ -1,10 +1,10 @@
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
 
@@ -24,7 +24,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var InfiniteGrid = (function (_React$Component) {
+var InfiniteGrid = function (_React$Component) {
 	_inherits(InfiniteGrid, _React$Component);
 
 	_createClass(InfiniteGrid, [{
@@ -55,7 +55,9 @@ var InfiniteGrid = (function (_React$Component) {
 				wrapperHeight: _react2.default.PropTypes.number,
 				lazyCallback: _react2.default.PropTypes.func,
 				renderRangeCallback: _react2.default.PropTypes.func,
-				buffer: _react2.default.PropTypes.number
+				buffer: _react2.default.PropTypes.number,
+				gridStyle: _react2.default.PropTypes.object,
+				shouldComponentUpdate: _react2.default.PropTypes.func
 			};
 		}
 	}]);
@@ -63,15 +65,15 @@ var InfiniteGrid = (function (_React$Component) {
 	function InfiniteGrid(props) {
 		_classCallCheck(this, InfiniteGrid);
 
-		var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(InfiniteGrid).call(this, props));
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(InfiniteGrid).call(this, props));
 
-		_this2.state = _this2.initialState();
+		_this.state = _this.initialState();
 		// bind the functions
-		_this2._scrollListener = _this2._scrollListener.bind(_this2);
-		_this2._updateItemDimensions = _this2._updateItemDimensions.bind(_this2);
-		_this2._resizeListener = _this2._resizeListener.bind(_this2);
-		_this2._visibleIndexes = _this2._visibleIndexes.bind(_this2);
-		return _this2;
+		_this._scrollListener = _this._scrollListener.bind(_this);
+		_this._updateItemDimensions = _this._updateItemDimensions.bind(_this);
+		_this._resizeListener = _this._resizeListener.bind(_this);
+		_this._visibleIndexes = _this._visibleIndexes.bind(_this);
+		return _this;
 	}
 
 	// METHODS
@@ -84,18 +86,19 @@ var InfiniteGrid = (function (_React$Component) {
 				overflowY: 'scroll',
 				width: '100%',
 				height: this.props.wrapperHeight,
-				WebkitOverflowScrolling: true
+				WebkitOverflowScrolling: 'touch'
 			};
 		}
 	}, {
 		key: '_gridStyle',
 		value: function _gridStyle() {
-			return {
+			return _.merge({
 				position: 'relative',
 				marginTop: this.props.padding,
 				marginLeft: this.props.padding,
-				minHeight: this._getGridHeight()
-			};
+				minHeight: this._getGridHeight(),
+				minWidth: '100%'
+			}, this.props.gridStyle);
 		}
 	}, {
 		key: '_getGridRect',
@@ -105,8 +108,8 @@ var InfiniteGrid = (function (_React$Component) {
 	}, {
 		key: '_getGridHeight',
 		value: function _getGridHeight() {
-      var gridRow = Math.floor(this.props.entries.length / this.state.itemDimensions.itemsPerRow)
-			return (gridRow > 2) ? gridRow  * this.state.itemDimensions.height : 3 * this.state.itemDimensions.height;
+			var gridRow = Math.floor(this.props.entries.length / this.state.itemDimensions.itemsPerRow);
+			return this.props.entries.length < this.state.itemDimensions.itemsPerRow ? this.state.itemDimensions.height : gridRow > 2 ? gridRow * this.state.itemDimensions.height : 3 * this.state.itemDimensions.height;
 		}
 	}, {
 		key: '_getWrapperRect',
@@ -231,7 +234,11 @@ var InfiniteGrid = (function (_React$Component) {
 	}, {
 		key: 'shouldComponentUpdate',
 		value: function shouldComponentUpdate(nextProps, nextState) {
-			return !(0, _lodash.isEqual)(this.state, nextState);
+			if (this.props.shouldComponentUpdate) {
+				return this.props.shouldComponentUpdate.call(this, nextProps, nextState);
+			}
+			// or...
+			return true;
 		}
 	}, {
 		key: 'componentWillUnmount',
@@ -244,11 +251,11 @@ var InfiniteGrid = (function (_React$Component) {
 	}, {
 		key: '_scrollListener',
 		value: function _scrollListener(event) {
-			var _this = this;
+			var _this2 = this;
 
 			clearTimeout(this.scrollOffset);
 			this.scrollOffset = setTimeout(function () {
-				_this._visibleIndexes();
+				_this2._visibleIndexes();
 			}, 10);
 		}
 	}, {
@@ -302,7 +309,7 @@ var InfiniteGrid = (function (_React$Component) {
 	}]);
 
 	return InfiniteGrid;
-})(_react2.default.Component);
+}(_react2.default.Component);
 
 exports.default = InfiniteGrid;
 ;
@@ -312,5 +319,9 @@ InfiniteGrid.defaultProps = {
 	padding: 10,
 	entries: [],
 	height: 250,
-	width: 250
+	width: 250,
+	gridStyle: {},
+	shouldComponentUpdate: function shouldComponentUpdate() {
+		return !(0, _lodash.isEqual)(undefined.state, nextState);
+	}
 };

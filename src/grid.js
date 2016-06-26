@@ -1,5 +1,5 @@
 import React from 'react';
-import {isEqual} from 'lodash';
+import {isEqual, merge} from 'lodash';
 import Item from './item';
 
 export default class InfiniteGrid extends React.Component {
@@ -15,7 +15,8 @@ export default class InfiniteGrid extends React.Component {
 			lazyCallback: React.PropTypes.func,
 			renderRangeCallback: React.PropTypes.func,
 			buffer: React.PropTypes.number,
-			gridStyle: React.PropTypes.object
+			gridStyle: React.PropTypes.object,
+			shouldComponentUpdate: React.PropTypes.func
 		}
 	}
 
@@ -57,14 +58,13 @@ export default class InfiniteGrid extends React.Component {
 	}
 
 	_gridStyle() {
-		return {
+		return _.merge({
 			position: 'relative',
 			marginTop: this.props.padding,
 			marginLeft: this.props.padding,
 			minHeight: this._getGridHeight(),
 			minWidth: '100%',
-			...this.props.gridStyle
-		};
+		}, this.props.gridStyle);
 	}
 
 	_getGridRect() {
@@ -184,7 +184,11 @@ export default class InfiniteGrid extends React.Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		return !isEqual(this.state, nextState);
+		if (this.props.shouldComponentUpdate) {
+			return this.props.shouldComponentUpdate.call(this, nextProps, nextState)
+		}
+		// or...
+		return true
 	}
 
 	componentWillUnmount() {
@@ -252,5 +256,6 @@ InfiniteGrid.defaultProps = {
 	entries: [],
 	height: 250,
 	width: 250,
-	gridStyle: {}
+	gridStyle: {},
+	shouldComponentUpdate: () => !isEqual(this.state, nextState)
 }
