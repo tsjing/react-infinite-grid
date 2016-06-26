@@ -321,7 +321,7 @@ InfiniteGrid.defaultProps = {
 	height: 250,
 	width: 250,
 	gridStyle: {},
-	shouldComponentUpdate: function shouldComponentUpdate() {
-		return !(0, _lodash.isEqual)(undefined.state, nextState);
+	shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
+		return !(0, _lodash.isEqual)(this.state, nextState);
 	}
 };
