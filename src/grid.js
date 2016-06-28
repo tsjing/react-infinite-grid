@@ -68,7 +68,6 @@ export default class InfiniteGrid extends React.Component {
 	}
 
 	_getGridRect() {
-		if (!this.refs.grid && this.refs.grid.getBoundingClientRect) return {height: 720, width: 1080}
 		return this.refs.grid.getBoundingClientRect();
 	}
 
@@ -80,7 +79,6 @@ export default class InfiniteGrid extends React.Component {
 	}
 
 	_getWrapperRect() {
-		if (!this.refs.wrapper && this.refs.wrapper.getBoundingClientRect) return {height: 720, width: 1080}
 		return this.refs.wrapper.getBoundingClientRect();
 	}
 
