@@ -103,7 +103,6 @@ var InfiniteGrid = function (_React$Component) {
 	}, {
 		key: '_getGridRect',
 		value: function _getGridRect() {
-			if (!this.refs.grid && this.refs.grid.getBoundingClientRect) return { height: 720, width: 1080 };
 			return this.refs.grid.getBoundingClientRect();
 		}
 	}, {
@@ -115,7 +114,6 @@ var InfiniteGrid = function (_React$Component) {
 	}, {
 		key: '_getWrapperRect',
 		value: function _getWrapperRect() {
-			if (!this.refs.wrapper && this.refs.wrapper.getBoundingClientRect) return { height: 720, width: 1080 };
 			return this.refs.wrapper.getBoundingClientRect();
 		}
 	}, {
