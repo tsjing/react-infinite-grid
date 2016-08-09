@@ -16,7 +16,8 @@ export default class InfiniteGrid extends React.Component {
 			renderRangeCallback: React.PropTypes.func,
 			buffer: React.PropTypes.number,
 			gridStyle: React.PropTypes.object,
-			shouldComponentUpdate: React.PropTypes.func
+			shouldComponentUpdate: React.PropTypes.func,
+			itemWrapper: React.PropTypes.func // function to wrap Item components (for use with MobX), defaults to returning the component itself
 		}
 	}
 
@@ -259,5 +260,6 @@ InfiniteGrid.defaultProps = {
 	gridStyle: {},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return !isEqual(this.state, nextState)
-	} 
+	},
+	itemWrapper: C => C // default to just returning the component
 }

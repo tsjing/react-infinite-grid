@@ -29,6 +29,7 @@ var InfiniteGrid = function (_React$Component) {
 
 	_createClass(InfiniteGrid, [{
 		key: 'initialState',
+		// function to wrap Item components (for use with MobX), defaults to returning the component itself
 		value: function initialState() {
 			return {
 				initiatedLazyload: false,
@@ -57,8 +58,8 @@ var InfiniteGrid = function (_React$Component) {
 				renderRangeCallback: _react2.default.PropTypes.func,
 				buffer: _react2.default.PropTypes.number,
 				gridStyle: _react2.default.PropTypes.object,
-				shouldComponentUpdate: _react2.default.PropTypes.func
-			};
+				shouldComponentUpdate: _react2.default.PropTypes.func,
+				itemWrapper: _react2.default.PropTypes.func };
 		}
 	}]);
 
@@ -323,5 +324,8 @@ InfiniteGrid.defaultProps = {
 	gridStyle: {},
 	shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
 		return !(0, _lodash.isEqual)(this.state, nextState);
-	}
+	},
+	itemWrapper: function itemWrapper(C) {
+		return C;
+	} // default to just returning the component
 };
