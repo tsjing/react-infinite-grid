@@ -283,6 +283,8 @@ var InfiniteGrid = function (_React$Component) {
 				return null;
 			}
 
+			var Item = this.props.itemWrapper(_item2.default); // wrap the Item function in whatever we want to wrap it in (eg decorator)
+
 			for (var i = this.state.minItemIndex; i <= this.state.maxItemIndex; i++) {
 				var entry = this.props.entries[i];
 				if (!entry) {
@@ -295,7 +297,7 @@ var InfiniteGrid = function (_React$Component) {
 					dimensions: this.state.itemDimensions,
 					data: entry
 				};
-				entries.push(_react2.default.createElement(_item2.default, itemProps));
+				entries.push(_react2.default.createElement(Item, itemProps));
 			}
 			return _react2.default.createElement(
 				'div',

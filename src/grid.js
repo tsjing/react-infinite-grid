@@ -1,6 +1,6 @@
 import React from 'react';
 import {isEqual, merge} from 'lodash';
-import Item from './item';
+import _Item from './item';
 
 export default class InfiniteGrid extends React.Component {
 
@@ -224,6 +224,8 @@ export default class InfiniteGrid extends React.Component {
 		if (!this.props.entries.length) {
 			return null;
 		}
+
+		const Item = this.props.itemWrapper(_Item) // wrap the Item function in whatever we want to wrap it in (eg decorator)
 
 		for (let i = this.state.minItemIndex; i <= this.state.maxItemIndex; i++) {
 			let entry = this.props.entries[i];
