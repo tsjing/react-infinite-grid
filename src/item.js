@@ -21,10 +21,11 @@ export default class Item extends React.Component {
 	}
 
 	// LIFECYCLE
-
+	/*
 	shouldComponentUpdate(nextProps, nextState) {
 		return !isEqual(this.props, nextProps);
 	}
+	*/
 
 	// RENDER
 

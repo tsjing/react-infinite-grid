@@ -47,12 +47,11 @@ var Item = function (_React$Component) {
 		}
 
 		// LIFECYCLE
-
-	}, {
-		key: 'shouldComponentUpdate',
-		value: function shouldComponentUpdate(nextProps, nextState) {
-			return !(0, _lodash.isEqual)(this.props, nextProps);
-		}
+		/*
+  shouldComponentUpdate(nextProps, nextState) {
+  	return !isEqual(this.props, nextProps);
+  }
+  */
 
 		// RENDER
 
