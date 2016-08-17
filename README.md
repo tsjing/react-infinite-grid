@@ -55,6 +55,9 @@ ReactDOM.render(<InfiniteGrid itemClassName={"item"} entries={items} />, documen
 - **padding** `React.PropTypes.number` - The padding around your items
 - **wrapperHeight** `React.PropTypes.number` - The height of the grid.
 - **lazyCallback** `React.PropTypes.func` - A function that takes no arguments which is called when a user reaches the end of the grid. Useful if you want to lazy load your data.
+- **shouldComponentUpdate** `React.PropTypes.func` - A custom shouldComponentUpdate function that allows you to customize update behavior of the infinite grid. Keep in mind that customizing this function may affect perf (considerably). By default, it is set to return true.
+- **gridStyle** `React.PropTypes.object` - A custom styling for the infinite grid. This might help you resolve some display issues on some devices (eg mobile).
+
 
 # Demo
 

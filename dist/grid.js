@@ -57,7 +57,8 @@ var InfiniteGrid = function (_React$Component) {
 				renderRangeCallback: _react2.default.PropTypes.func,
 				buffer: _react2.default.PropTypes.number,
 				gridStyle: _react2.default.PropTypes.object,
-				shouldComponentUpdate: _react2.default.PropTypes.func
+				shouldComponentUpdate: _react2.default.PropTypes.func,
+				itemWrapper: _react2.default.PropTypes.func // function to wrap Item components (for use with MobX), defaults to returning the component itself
 			};
 		}
 	}]);
@@ -103,7 +104,6 @@ var InfiniteGrid = function (_React$Component) {
 	}, {
 		key: '_getGridRect',
 		value: function _getGridRect() {
-			if (!this.refs.grid && this.refs.grid.getBoundingClientRect) return { height: 720, width: 1080 };
 			return this.refs.grid.getBoundingClientRect();
 		}
 	}, {
@@ -115,7 +115,6 @@ var InfiniteGrid = function (_React$Component) {
 	}, {
 		key: '_getWrapperRect',
 		value: function _getWrapperRect() {
-			if (!this.refs.wrapper && this.refs.wrapper.getBoundingClientRect) return { height: 720, width: 1080 };
 			return this.refs.wrapper.getBoundingClientRect();
 		}
 	}, {
@@ -125,12 +124,12 @@ var InfiniteGrid = function (_React$Component) {
 
 			// The number of rows that the user has scrolled past
 			var scrolledPast = this._scrolledPastRows() * itemsPerRow;
-			if (scrolledPast < 0) scrolledPast = 0;
+			if (this._isNegative(scrolledPast)) scrolledPast = 0;
 
 			// If i have scrolled past 20 items, but 60 are visible on screen,
 			// we do not want to change the minimum
 			var min = scrolledPast - itemsPerRow;
-			if (min < 0) min = 0;
+			if (this._isNegative(min)) min = 0;
 
 			// the maximum should be the number of items scrolled past, plus some
 			// buffer
@@ -161,13 +160,15 @@ var InfiniteGrid = function (_React$Component) {
 	}, {
 		key: '_itemsPerRow',
 		value: function _itemsPerRow() {
-			return Math.floor(this._getGridRect().width / this._itemWidth());
+			var itemsPerRow = Math.floor(this._getGridRect().width / this._itemWidth());
+			if (itemsPerRow === 0) return 1;
+			return itemsPerRow;
 		}
 	}, {
 		key: '_totalRows',
 		value: function _totalRows() {
 			var scrolledPastHeight = this.props.entries.length / this._itemsPerRow() * this._itemHeight();
-			if (scrolledPastHeight < 0) return 0;
+			if (this._isNegative(scrolledPastHeight)) return 0;
 			return scrolledPastHeight;
 		}
 	}, {
@@ -199,6 +200,11 @@ var InfiniteGrid = function (_React$Component) {
 				this.setState({ initiatedLazyload: true });
 				this.props.lazyCallback(this.state.maxItemIndex);
 			}
+		}
+	}, {
+		key: '_isNegative',
+		value: function _isNegative(n) {
+			return ((n = +n) || 1 / n) < 0;
 		}
 
 		// LIFECYCLE
@@ -284,6 +290,8 @@ var InfiniteGrid = function (_React$Component) {
 				return null;
 			}
 
+			var Item = this.props.itemWrapper(_item2.default); // wrap the Item function in whatever we want to wrap it in (eg decorator)
+
 			for (var i = this.state.minItemIndex; i <= this.state.maxItemIndex; i++) {
 				var entry = this.props.entries[i];
 				if (!entry) {
@@ -296,7 +304,7 @@ var InfiniteGrid = function (_React$Component) {
 					dimensions: this.state.itemDimensions,
 					data: entry
 				};
-				entries.push(_react2.default.createElement(_item2.default, itemProps));
+				entries.push(_react2.default.createElement(Item, itemProps));
 			}
 			return _react2.default.createElement(
 				'div',
@@ -325,5 +333,8 @@ InfiniteGrid.defaultProps = {
 	gridStyle: {},
 	shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
 		return !(0, _lodash.isEqual)(this.state, nextState);
-	}
+	},
+	itemWrapper: function itemWrapper(C) {
+		return C;
+	} // default to just returning the component
 };
