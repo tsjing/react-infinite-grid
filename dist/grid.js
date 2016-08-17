@@ -29,7 +29,6 @@ var InfiniteGrid = function (_React$Component) {
 
 	_createClass(InfiniteGrid, [{
 		key: 'initialState',
-		// function to wrap Item components (for use with MobX), defaults to returning the component itself
 		value: function initialState() {
 			return {
 				initiatedLazyload: false,
@@ -59,7 +58,8 @@ var InfiniteGrid = function (_React$Component) {
 				buffer: _react2.default.PropTypes.number,
 				gridStyle: _react2.default.PropTypes.object,
 				shouldComponentUpdate: _react2.default.PropTypes.func,
-				itemWrapper: _react2.default.PropTypes.func };
+				itemWrapper: _react2.default.PropTypes.func // function to wrap Item components (for use with MobX), defaults to returning the component itself
+			};
 		}
 	}]);
 
@@ -124,12 +124,12 @@ var InfiniteGrid = function (_React$Component) {
 
 			// The number of rows that the user has scrolled past
 			var scrolledPast = this._scrolledPastRows() * itemsPerRow;
-			if (scrolledPast < 0) scrolledPast = 0;
+			if (this._isNegative(scrolledPast)) scrolledPast = 0;
 
 			// If i have scrolled past 20 items, but 60 are visible on screen,
 			// we do not want to change the minimum
 			var min = scrolledPast - itemsPerRow;
-			if (min < 0) min = 0;
+			if (this._isNegative(min)) min = 0;
 
 			// the maximum should be the number of items scrolled past, plus some
 			// buffer
@@ -160,13 +160,15 @@ var InfiniteGrid = function (_React$Component) {
 	}, {
 		key: '_itemsPerRow',
 		value: function _itemsPerRow() {
-			return Math.floor(this._getGridRect().width / this._itemWidth());
+			var itemsPerRow = Math.floor(this._getGridRect().width / this._itemWidth());
+			if (itemsPerRow === 0) return 1;
+			return itemsPerRow;
 		}
 	}, {
 		key: '_totalRows',
 		value: function _totalRows() {
 			var scrolledPastHeight = this.props.entries.length / this._itemsPerRow() * this._itemHeight();
-			if (scrolledPastHeight < 0) return 0;
+			if (this._isNegative(scrolledPastHeight)) return 0;
 			return scrolledPastHeight;
 		}
 	}, {
@@ -198,6 +200,11 @@ var InfiniteGrid = function (_React$Component) {
 				this.setState({ initiatedLazyload: true });
 				this.props.lazyCallback(this.state.maxItemIndex);
 			}
+		}
+	}, {
+		key: '_isNegative',
+		value: function _isNegative(n) {
+			return ((n = +n) || 1 / n) < 0;
 		}
 
 		// LIFECYCLE

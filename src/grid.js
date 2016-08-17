@@ -88,12 +88,12 @@ export default class InfiniteGrid extends React.Component {
 
 		// The number of rows that the user has scrolled past
 		var scrolledPast = (this._scrolledPastRows() * itemsPerRow);
-		if (scrolledPast < 0) scrolledPast = 0;
+		if (this._isNegative(scrolledPast)) scrolledPast = 0;
 
 		// If i have scrolled past 20 items, but 60 are visible on screen,
 		// we do not want to change the minimum
 		var min = scrolledPast - itemsPerRow;
-		if (min < 0) min = 0;
+		if (this._isNegative(min)) min = 0;
 
 		// the maximum should be the number of items scrolled past, plus some
 		// buffer
@@ -122,12 +122,14 @@ export default class InfiniteGrid extends React.Component {
 	}
 
 	_itemsPerRow() {
-		return Math.floor(this._getGridRect().width / this._itemWidth());
+		const itemsPerRow = Math.floor(this._getGridRect().width / this._itemWidth());
+		if (itemsPerRow === 0) return 1;
+		return itemsPerRow;
 	}
 
 	_totalRows() {
 		const scrolledPastHeight = (this.props.entries.length / this._itemsPerRow()) * this._itemHeight();
-		if (scrolledPastHeight < 0) return 0;
+		if (this._isNegative(scrolledPastHeight)) return 0;
 		return scrolledPastHeight;
 	}
 
@@ -154,6 +156,10 @@ export default class InfiniteGrid extends React.Component {
 			this.setState({initiatedLazyload: true });
 			this.props.lazyCallback(this.state.maxItemIndex);
 		}
+	}
+
+	_isNegative(n) {
+		return ((n = +n) || 1 / n) < 0;
 	}
 
 	// LIFECYCLE
